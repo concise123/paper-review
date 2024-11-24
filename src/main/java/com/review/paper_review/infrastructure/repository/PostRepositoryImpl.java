@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ListPostRepository implements PostRepository {
+public class PostRepositoryImpl implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ListPostRepository(JdbcTemplate jdbcTemplate) {
+    public PostRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

@@ -20,13 +20,13 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ListPostRepositoryTest {
+public class PostRepositoryImplTest {
 
     @Mock
     private JdbcTemplate jdbcTemplate;
 
     @InjectMocks
-    private ListPostRepository postRepository;
+    private PostRepositoryImpl postRepository;
 
     private Post mockPost;
     private Post mockPost2;
@@ -59,7 +59,7 @@ public class ListPostRepositoryTest {
     @DisplayName("게시글 전체 조회")
     void testFindAll() {
         // jdbcTemplate.query 메서드가 호출되었을 때 가짜 데이터를 반환하도록 설정
-        when(jdbcTemplate.query(any(String.class), any(ListPostRepository.PostRowMapper.class)))
+        when(jdbcTemplate.query(any(String.class), any(PostRepositoryImpl.PostRowMapper.class)))
                 .thenReturn(Arrays.asList(mockPost, mockPost2));
 
         List<Post> result = postRepository.findAll();
@@ -76,7 +76,7 @@ public class ListPostRepositoryTest {
     @DisplayName("아이디로 게시글 조회")
     void testFindById_Found() {
         // jdbcTemplate.query 메서드가 호출되었을 때 가짜 데이터를 반환하도록 설정
-        when(jdbcTemplate.query(anyString(), any(Object[].class), any(ListPostRepository.PostRowMapper.class)))
+        when(jdbcTemplate.query(anyString(), any(Object[].class), any(PostRepositoryImpl.PostRowMapper.class)))
                 .thenReturn(Collections.singletonList(mockPost));
 
         Optional<Post> foundPost = postRepository.findById(1L);
@@ -90,7 +90,7 @@ public class ListPostRepositoryTest {
     @DisplayName("아이디로 게시글 조회 - 해당하는 게시글 못 찾음")
     void testFindById_NotFound() {
         // jdbcTemplate.query가 호출되었을 때 결과가 없도록 설정
-        when(jdbcTemplate.query(any(String.class), any(Object[].class), any(ListPostRepository.PostRowMapper.class)))
+        when(jdbcTemplate.query(any(String.class), any(Object[].class), any(PostRepositoryImpl.PostRowMapper.class)))
                 .thenReturn(Collections.emptyList());
 
         Optional<Post> result = postRepository.findById(-1L);
