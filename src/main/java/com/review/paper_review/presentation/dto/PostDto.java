@@ -2,12 +2,14 @@ package com.review.paper_review.presentation.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PostDto {
 
     private Long id;
