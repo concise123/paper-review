@@ -15,7 +15,8 @@ var main = {
     register : function () {
         let data = {
             title : $('#title').val().trim(),
-            content : $('#content').val().trim()
+            content : $('#content').val().trim(),
+            writerId : $('#writerId').val().trim()
         };
 
         $.ajax({
