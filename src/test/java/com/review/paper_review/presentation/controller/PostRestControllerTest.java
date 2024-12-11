@@ -14,9 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PostRestController.class)
@@ -39,15 +39,25 @@ public class PostRestControllerTest {
                 .id(postId)
                 .title("제목")
                 .content("내용")
+                .writerId("작성자")
                 .build();
 
         when(postService.getPostById(postId)).thenReturn(mockPostDto);
 
-        mockMvc.perform(get("/api/v1/posts/{id}", postId)
+        mockMvc.perform(get("/api/v1/posts/{id}", postId).with(oauth2Login())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("제목"))
-                .andExpect(jsonPath("$.content").value("내용"));
+                .andExpect(jsonPath("$.content").value("내용"))
+                .andExpect(jsonPath("$.writerId").value("작성자"));
+    }
+
+    @Test
+    @DisplayName("아이디로 게시글 조회 - 미로그인 상태일 때 OAuth2 로그인 페이지로 리디렉션되는지 확인")
+    public void testOAuth2LoginRedirectWhenNotAuthenticated() throws Exception {
+        mockMvc.perform(get("/api/v1/posts/{id}", 1L))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/oauth2/authorization/google"));
     }
 
 }

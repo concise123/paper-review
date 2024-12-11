@@ -25,8 +25,8 @@ public class PostRepositoryImpl implements PostRepository {
     // 게시글 작성
     @Override
     public int save(Post post) {
-        String sql = "INSERT INTO posts (title, content) VALUES (?, ?)";
-        return jdbcTemplate.update(sql, post.getTitle(), post.getContent());
+        String sql = "INSERT INTO posts (title, content, writer_id) VALUES (?, ?, ?)";
+        return jdbcTemplate.update(sql, post.getTitle(), post.getContent(), post.getWriterId());
     }
 
     // 게시글 전체 조회
@@ -63,6 +63,7 @@ public class PostRepositoryImpl implements PostRepository {
             post.setTitle(rs.getString("title"));
             post.setContent(rs.getString("content"));
             post.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+            post.setWriterId(rs.getString("writer_id"));
             return post;
         }
     }

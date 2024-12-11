@@ -38,11 +38,13 @@ public class PostRepositoryImplTest {
                 .id(1L)
                 .title("제목")
                 .content("내용")
+                .writerId("test@gmail.com")
                 .build();
         mockPost2 = Post.builder()
                 .id(2L)
                 .title("제목 2")
                 .content("내용 2")
+                .writerId("test2@gmail.com")
                 .build();
     }
 
@@ -52,7 +54,7 @@ public class PostRepositoryImplTest {
         postRepository.save(mockPost);
 
         // 결과 검증
-        verify(jdbcTemplate).update("INSERT INTO posts (title, content) VALUES (?, ?)", mockPost.getTitle(), mockPost.getContent());
+        verify(jdbcTemplate).update("INSERT INTO posts (title, content, writer_id) VALUES (?, ?, ?)", mockPost.getTitle(), mockPost.getContent(), mockPost.getWriterId());
     }
 
     @Test
@@ -68,8 +70,10 @@ public class PostRepositoryImplTest {
         assertEquals(2, result.size());
         assertEquals("제목", result.get(0).getTitle());
         assertEquals("내용", result.get(0).getContent());
+        assertEquals("test@gmail.com", result.get(0).getWriterId());
         assertEquals("제목 2", result.get(1).getTitle());
         assertEquals("내용 2", result.get(1).getContent());
+        assertEquals("test2@gmail.com", result.get(1).getWriterId());
     }
 
     @Test
