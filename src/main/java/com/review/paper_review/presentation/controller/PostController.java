@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class PostController {
 
-    private PostService postService;
+    private final PostService postService;
 
     @Autowired
     PostController(PostService postService) {
